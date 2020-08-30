@@ -7,21 +7,7 @@ export const Container = styled(motion.div)`
   display: flex;
   flex-direction: column;
   background: var(--background);
-`;
-
-export const Heading = styled(motion.div)`
-  width: 100vw;
-  background: var(--background);
-  border: 1px solid var(--border);
-  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
-
-  > h1 {
-    font: 700 2.4rem Inter;
-    line-height: 2.4rem;
-    color: var(--main-blue);
-    padding: 18px;
-    text-align: start;
-  }
+  z-index: 0;
 `;
 
 export const Filters = styled(motion.div)`

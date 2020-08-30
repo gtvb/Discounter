@@ -9,11 +9,13 @@ export default createGlobalStyle`
     --shadow: rgba(0,118,255,0.39);
     --main-text: #111;
     --secondary-text: #888;
+    --modal-text: #333;
     --border: #e0e0e7;
     --bg-green: #00ff7f;
     --bg-red: #f13030bb;
     --strong-green: #007F00;
     --strong-red: #f00;
+    --overlay: rgba(0, 0, 0, 0.5);
   }
 
   * {

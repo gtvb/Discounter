@@ -1,79 +1,108 @@
-import React from 'react';
-
+import React, { useState } from 'react';
+import { FiX } from 'react-icons/fi';
 import {
-  Wrapper,
   Container,
+  Wrapper,
+  ImgHolder,
+  ContentContainer,
   Group,
-  From,
-  Availability,
-  Content,
+  About,
+  Header,
+  Heading,
   Original,
   Code,
-  Full,
-  StillValid,
-} from '../../styles/Modal';
+  ForWrapper,
+  AboutModalWrapper,
+  AboutModal,
+} from '../../styles/SelectedItemStyles';
 
-import { AnimatePresence } from 'framer-motion';
 import { DiscountItem } from '../discounts-dashboard';
 import { fetchApi } from '../../lib/api-prismic';
 import { GetStaticPaths, GetStaticProps } from 'next';
+import AppHeader from '../../components/Header';
+import { AnimateSharedLayout, AnimatePresence } from 'framer-motion';
 
-const SelectedModal = () => {
+interface CardProps {
+  post: DiscountItem;
+}
+
+const SelectedModal = ({ post: selectedItem }: CardProps) => {
+  const [isModalSelected, setIsModalSelected] = useState<boolean>(false);
+
+  function toggleModal() {
+    setIsModalSelected(!isModalSelected);
+  }
+
   return (
-    <Wrapper>
-      <h1>Hello</h1>
-      {/* <Container>
-        <Group>
-          <From>{selectedItem.node.from}</From>
+    <Container>
+      <AppHeader />
 
-          <Availability>Posted: {selectedItem.node.post_date}</Availability>
-        </Group>
+      <Wrapper>
+        <ImgHolder data-aos="fade-right">
+          <img src="/discount.svg" alt="" />
+        </ImgHolder>
 
-        <Content>
-          {selectedId && (
-            <AnimatePresence>
-              <Group>
-                <Original>
-                  Original URL: {selectedItem.node.url_without_discount}
-                </Original>
-                <Code>Discount Code: {selectedItem.node.discount_code}</Code>
-              </Group>
+        <ContentContainer data-aos="fade-left">
+          <Header>
+            <Heading>{selectedItem.node.from} Discount</Heading>
+            <p>Post date: {selectedItem.node.post_date}</p>
+          </Header>
 
-              <Full>
-                Complete URL:{' '}
-                <a href={selectedItem.node.full_url}>
-                  {selectedItem.node.full_url}
-                </a>
-              </Full>
-            </AnimatePresence>
-          )}
+          <Group>
+            <About whileHover={{ scale: 1.1 }} onClick={toggleModal}>
+              About {selectedItem.node.from}
+            </About>
 
-          <StillValid>
-            <section
-              style={{
-                background: selectedItem.node.still_available
-                  ? 'var(--bg-green)'
-                  : 'var(--bg-red)',
-              }}
+            <Original whileHover={{ scale: 1.1 }}>Original Website</Original>
+          </Group>
+
+          <Group>
+            <Code>
+              <p>Discount code:</p>
+              <h1>{selectedItem.node.discount_code}</h1>
+            </Code>
+
+            <ForWrapper>
+              <div>
+                <p>{selectedItem.node.discount_for.alt}</p>
+                <img
+                  src={selectedItem.node.discount_for.url}
+                  alt={selectedItem.node.from}
+                />
+              </div>
+            </ForWrapper>
+          </Group>
+        </ContentContainer>
+      </Wrapper>
+
+      {isModalSelected && (
+        <AnimatePresence>
+          <AboutModalWrapper>
+            <AboutModal
+              initial={{ y: 300, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
             >
-              <p
-                style={{
-                  color: selectedItem.node.still_available
-                    ? 'var(--strong-green)'
-                    : 'var(--strong-red)',
-                }}
-              >
-                {selectedItem.node.still_available
-                  ? 'Available'
-                  : 'Unavailable'}
-              </p>
-            </section>
+              <FiX size={20} color="#f13030" onClick={toggleModal} />
 
-            <p>{selectedItem.node.category}</p>
-          </StillValid>
-        </Content>
-      </Container> */}
-    </Wrapper>
+              <p>{selectedItem.node.from}</p>
+
+              <h3>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+                orci magna, molestie vel fringilla vel, facilisis sit amet
+                lectus. Integer tortor turpis, rhoncus et ultrices eget,
+                tincidunt in erat. Aliquam erat volutpat. Etiam porttitor enim
+                nec lorem egestas, id accumsan lorem vestibulum. Aenean
+                convallis neque id ex efficitur tincidunt. Cras sit amet
+                porttitor diam, eu auctor ex. Morbi fringilla felis ligula, id
+                tincidunt risus pretium ac. Fusce congue, tellus in bibendum
+                venenatis, nisi nibh malesuada nibh, at vulputate augue ex et
+                mauris
+              </h3>
+            </AboutModal>
+          </AboutModalWrapper>
+        </AnimatePresence>
+      )}
+    </Container>
   );
 };
 
@@ -107,7 +136,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps = async ({ params }) => {
   const post = await fetchApi(
     `
     query ($id: String!) {
@@ -118,9 +147,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
               id
             }
             from
+            url_without_discount
+            discount_for
             post_date
+            discount_code
             still_available
-            category 
+            category    
           }
         }
       }
@@ -129,7 +161,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     { id: params.itemId }
   );
 
+  const formatedCardData = post.allDiscountitems.edges[0];
+
   return {
-    props: post,
+    props: {
+      post: formatedCardData,
+    },
   };
 };

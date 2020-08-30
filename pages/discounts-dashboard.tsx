@@ -2,20 +2,23 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { fetchApi } from '../lib/api-prismic';
 import DiscountCard from '../components/DiscountCard';
-import { Container, Heading, DiscountGrid } from '../styles/DiscountPageStyles';
+import { Container, DiscountGrid } from '../styles/DiscountPageStyles';
 import { motion, AnimateSharedLayout, AnimatePresence } from 'framer-motion';
+import Header from '../components/Header';
 
 export interface DiscountItem {
   node: {
     _meta: {
       id: string;
-      uid: string;
     };
     from: string;
     category: string;
+    discount_for: {
+      alt: string;
+      url: string;
+    };
     url_without_discount: string;
     discount_code: string;
-    full_url: string;
     still_available: boolean;
     post_date: string;
   };
@@ -26,24 +29,29 @@ interface DashboardProps {
 }
 
 const DiscountsDashboard: React.FC<DashboardProps> = ({ discountItems }) => {
-  const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
-
   return (
     <AnimateSharedLayout type="crossfade">
       <Container>
-        <Heading>
-          <h1>Discounter</h1>
-        </Heading>
+        <Header />
 
-        <DiscountGrid>
+        <DiscountGrid data-aos="fade-up">
           {discountItems.map((item) => (
             <Link
-              href="/discounts/[itemId]"
-              as={`/discounts/${item.node._meta.id}`}
+              href={
+                item.node.still_available
+                  ? '/discounts/[itemId]'
+                  : '/discounts-dashboard'
+              }
+              as={
+                item.node.still_available
+                  ? `/discounts/${item.node._meta.id}`
+                  : '/discounts-dashboard'
+              }
               key={item.node._meta.id}
             >
               <motion.div
                 whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 1.2 }}
                 layoutId={item.node._meta.id}
               >
                 <DiscountCard itemDetails={item} />
@@ -72,7 +80,7 @@ export async function getStaticProps() {
             from
             post_date
             still_available
-            category 
+            category  
           }
         }
       }
