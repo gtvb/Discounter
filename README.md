@@ -1,8 +1,12 @@
 #  About :rocket:
 
+App made to list discount codes released in many online websites, related to many fields such as education, tech, shopping, food and many more.
 
+## Access the app :computer:
 
-##  Installation :laptop:
+[App]()
+
+##  Installation :hammer:
 Make sure your have Node.js installed on your computer.
 
 Clone the repo:
