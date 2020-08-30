@@ -4,7 +4,7 @@ App made to list discount codes released in many online websites, related to man
 
 ## Access the app :computer:
 
-[App]()
+[App](https://discounter.vercel.app)
 
 ##  Installation :hammer:
 Make sure your have Node.js installed on your computer.
