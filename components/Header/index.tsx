@@ -5,7 +5,7 @@ import { Heading } from './styles';
 const Header: React.FC = () => {
   return (
     <Heading>
-      <Link href="/discounts-dashboard">
+      <Link href="/">
         <h1>Discounter</h1>
       </Link>
     </Heading>

@@ -11,16 +11,17 @@ import {
   Heading,
   Original,
   Code,
-  ForWrapper,
   AboutModalWrapper,
   AboutModal,
 } from '../../styles/SelectedItemStyles';
 
-import { DiscountItem } from '../discounts-dashboard';
+import { DiscountItem } from '..';
 import { fetchApi } from '../../lib/api-prismic';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import AppHeader from '../../components/Header';
-import { AnimateSharedLayout, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
+import Head from 'next/head';
 
 interface CardProps {
   post: DiscountItem;
@@ -34,75 +35,61 @@ const SelectedModal = ({ post: selectedItem }: CardProps) => {
   }
 
   return (
-    <Container>
-      <AppHeader />
+    <>
+      <Head>
+        <title>{selectedItem.node.from} discount</title>
+      </Head>
+      <Container>
+        <AppHeader />
 
-      <Wrapper>
-        <ImgHolder data-aos="fade-right">
-          <img src="/discount.svg" alt="" />
-        </ImgHolder>
+        <Wrapper>
+          <ImgHolder data-aos="fade-right">
+            <img src="/discount.svg" alt="" />
+          </ImgHolder>
 
-        <ContentContainer data-aos="fade-left">
-          <Header>
-            <Heading>{selectedItem.node.from} Discount</Heading>
-            <p>Post date: {selectedItem.node.post_date}</p>
-          </Header>
+          <ContentContainer data-aos="fade-left">
+            <Header>
+              <Heading>{selectedItem.node.from} Discount</Heading>
+              <p>Post date: {selectedItem.node.post_date}</p>
+            </Header>
 
-          <Group>
-            <About whileHover={{ scale: 1.1 }} onClick={toggleModal}>
-              About {selectedItem.node.from}
-            </About>
+            <Group>
+              <About whileHover={{ scale: 1.1 }} onClick={toggleModal}>
+                About {selectedItem.node.from}
+              </About>
 
-            <Original whileHover={{ scale: 1.1 }}>Original Website</Original>
-          </Group>
+              <Link href={selectedItem.node.url_without_discount}>
+                <Original whileHover={{ scale: 1.1 }}>
+                  Original Website
+                </Original>
+              </Link>
+            </Group>
 
-          <Group>
             <Code>
-              <p>Discount code:</p>
+              <p>Discount code provided:</p>
               <h1>{selectedItem.node.discount_code}</h1>
             </Code>
+          </ContentContainer>
+        </Wrapper>
 
-            <ForWrapper>
-              <div>
-                <p>{selectedItem.node.discount_for.alt}</p>
-                <img
-                  src={selectedItem.node.discount_for.url}
-                  alt={selectedItem.node.from}
-                />
-              </div>
-            </ForWrapper>
-          </Group>
-        </ContentContainer>
-      </Wrapper>
+        {isModalSelected && (
+          <AnimatePresence>
+            <AboutModalWrapper>
+              <AboutModal
+                initial={{ y: 300, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+              >
+                <FiX size={20} color="#f13030" onClick={toggleModal} />
 
-      {isModalSelected && (
-        <AnimatePresence>
-          <AboutModalWrapper>
-            <AboutModal
-              initial={{ y: 300, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-            >
-              <FiX size={20} color="#f13030" onClick={toggleModal} />
+                <p>{selectedItem.node.from}</p>
 
-              <p>{selectedItem.node.from}</p>
-
-              <h3>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-                orci magna, molestie vel fringilla vel, facilisis sit amet
-                lectus. Integer tortor turpis, rhoncus et ultrices eget,
-                tincidunt in erat. Aliquam erat volutpat. Etiam porttitor enim
-                nec lorem egestas, id accumsan lorem vestibulum. Aenean
-                convallis neque id ex efficitur tincidunt. Cras sit amet
-                porttitor diam, eu auctor ex. Morbi fringilla felis ligula, id
-                tincidunt risus pretium ac. Fusce congue, tellus in bibendum
-                venenatis, nisi nibh malesuada nibh, at vulputate augue ex et
-                mauris
-              </h3>
-            </AboutModal>
-          </AboutModalWrapper>
-        </AnimatePresence>
-      )}
-    </Container>
+                <h3>{selectedItem.node.site_description}</h3>
+              </AboutModal>
+            </AboutModalWrapper>
+          </AnimatePresence>
+        )}
+      </Container>
+    </>
   );
 };
 
@@ -147,12 +134,10 @@ export const getStaticProps = async ({ params }) => {
               id
             }
             from
+            site_description
             url_without_discount
-            discount_for
             post_date
-            discount_code
-            still_available
-            category    
+            discount_code    
           }
         }
       }

@@ -34,6 +34,6 @@ export const DiscountGrid = styled(motion.main)`
   margin: 50px auto;
 
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(275px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-gap: 50px;
 `;

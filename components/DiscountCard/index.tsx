@@ -1,5 +1,5 @@
 import React from 'react';
-import { DiscountItem } from '../../pages/discounts-dashboard';
+import { DiscountItem } from '../../pages';
 import {
   Container,
   Group,

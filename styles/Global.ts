@@ -14,7 +14,7 @@ export default createGlobalStyle`
     --bg-green: #00ff7f;
     --bg-red: #f13030bb;
     --strong-green: #007F00;
-    --strong-red: #f00;
+    --strong-red: #9d0208;
     --overlay: rgba(0, 0, 0, 0.5);
   }
 

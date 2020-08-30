@@ -25,6 +25,10 @@ export const ImgHolder = styled.div`
   > img {
     width: 100%;
   }
+
+  @media (max-width: 1124px) {
+    display: none;
+  }
 `;
 
 export const About = styled(motion.button)`
@@ -46,6 +50,10 @@ export const ContentContainer = styled.div`
   align-items: center;
   justify-content: space-evenly;
   flex-direction: column;
+
+  @media (max-width: 1124px) {
+    width: 100vw;
+  }
 `;
 
 export const Header = styled.div`
@@ -80,7 +88,6 @@ export const Original = styled(motion.button)`
 `;
 
 export const Group = styled.div`
-  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
@@ -88,7 +95,6 @@ export const Group = styled.div`
 
 export const Code = styled(motion.div)`
   padding: 24px 0;
-  width: 200%;
   text-align: center;
 
   > p {
@@ -99,34 +105,6 @@ export const Code = styled(motion.div)`
   > h1 {
     font: 800 3.4rem Inter;
     color: var(--main-blue);
-  }
-`;
-
-export const ForWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column !important;
-
-  > div {
-    width: 50%;
-    border: 2px solid var(--main-blue);
-    border-radius: 5px;
-    padding: 8px;
-    text-align: center;
-    background: var(--card);
-  }
-
-  > div img {
-    width: 100%;
-
-    overflow: hidden;
-    position: relative;
-  }
-
-  > div p {
-    font: 500 1.2rem Inter;
-    padding: 8px 0;
   }
 `;
 
